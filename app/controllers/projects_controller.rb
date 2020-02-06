@@ -37,6 +37,6 @@ class ProjectsController < ApplicationController
 
     def get_user
       @user = User.find_by(id: params[:user_id])
-      @error = "User #{params[:user_id]} not found" if @user.blank?
+      puts "User #{params[:user_id]} not found" if @user.blank?
     end
 end

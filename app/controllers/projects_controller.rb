@@ -26,8 +26,14 @@ class ProjectsController < ApplicationController
     else
       @project = Project.new(project_params)
       @project.manager_id = @user.id
-      @project.save
-      render json: {status: 'SUCCESS', data: @project}, status: :ok
+      if @project.valid?
+        @project.save
+        render json: {status: 'SUCCESS', data: @project}, status: :ok
+      else
+        @valid = "Please set name greter then 1"
+        puts @valid
+        render json: {status: 'ERROR', data: @valid}, status: :ok
+      end
     end
   end
 

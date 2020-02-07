@@ -4,9 +4,11 @@ class ProjectsController < ApplicationController
 
   def index
     if params[:sort].present?
-      @projects = @user.projects.order(params[:sort])
+      sql = "SELECT 'projects'.* FROM 'projects' LEFT OUTER JOIN 'projects_users' ON 'projects_users'.'project_id' = 'projects'.'id' where 'projects_users'.'user_id' = #{@user.id} or 'projects'.'manager_id' = #{@user.id} order by 'projects'.#{params[:sort]}";
+      @projects = ActiveRecord::Base.connection.execute(sql).uniq
     else
-      @projects = @user.projects.order('created_at DESC')
+      sql = "SELECT 'projects'.* FROM 'projects' LEFT OUTER JOIN 'projects_users' ON 'projects_users'.'project_id' = 'projects'.'id' where 'projects_users'.'user_id' = #{@user.id} or 'projects'.'manager_id' = #{@user.id} order by 'projects'.'created_at' desc";
+      @projects = ActiveRecord::Base.connection.execute(sql).uniq
     end
     render json: {status: 'SUCCESS', data: @projects}, status: :ok
   end

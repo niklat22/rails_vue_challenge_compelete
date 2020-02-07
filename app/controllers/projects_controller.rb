@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+  skip_before_action :verify_authenticity_token
   before_action :get_user
 
   def index
@@ -18,7 +19,7 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    if @user.blank?
+    if @user.blank? || params[:project][:name].blank?
       @valid = "Record are invalidate"
       puts @valid
       render json: {status: 'ERROR', data: @valid}, status: :ok

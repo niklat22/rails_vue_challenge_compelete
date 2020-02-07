@@ -19,7 +19,7 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    if @user.blank? || params[:project][:name].blank?
+    if @user.blank?
       @valid = "Record are invalidate"
       puts @valid
       render json: {status: 'ERROR', data: @valid}, status: :ok
@@ -30,7 +30,7 @@ class ProjectsController < ApplicationController
         @project.save
         render json: {status: 'SUCCESS', data: @project}, status: :ok
       else
-        @valid = "Please set name greter then 1"
+        @valid = "Please enter name with greter then 1"
         puts @valid
         render json: {status: 'ERROR', data: @valid}, status: :ok
       end
